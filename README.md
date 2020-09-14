@@ -23,6 +23,7 @@ print(z['actualappliedmaxcurrent'])
 ## Control the charge station
 
 ```python
+# Sets the current to 15 amps
 changeChargeStationCurrent(15)
 ```
 
