@@ -44,7 +44,7 @@ import time
 import math
 from datetime import datetime, timedelta
 
-chargeStationIP = "192.168.2.43"
+chargeStationIP = "192.168.0.0"
 minimumCurrent = 0
 maximumCurrent = 16
 
