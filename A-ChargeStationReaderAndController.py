@@ -152,7 +152,7 @@ def fetchAllRegisters():
 
 		decodedStatusAndTransactionRegisters = OrderedDict([
 				('availability', decoder.decode_16bit_uint()),
-				('mode3state', decoder.decode_string(10).replace('\x00','')),
+				('mode3state', decoder.decode_string(10).decode("utf-8")),
 				('actualappliedmaxcurrent', decoder.decode_32bit_float()),
 				('modbusslavemaxcurrentvalidtime', decoder.decode_32bit_uint()),
 				('modbusslavemaxcurrent', decoder.decode_32bit_float()),
@@ -193,12 +193,12 @@ def fetchAllRegisters():
 		decoder = readChargeStationData(100,79,200)
 
 		decodedProductIdentificationRegisters = OrderedDict([
-				('name', decoder.decode_string(34).replace('\x00','')),
-				('manufacturer', decoder.decode_string(10).replace('\x00','')),
+				('name', decoder.decode_string(34).decode("utf-8")),
+				('manufacturer', decoder.decode_string(10).decode("utf-8")),
 				('modbustableversion', decoder.decode_16bit_int()),
-				('firmwareversion', decoder.decode_string(34).replace('\x00','')),
-				('platformtype', decoder.decode_string(34).replace('\x00','')),
-				('stationserialnumber', decoder.decode_string(22).replace('\x00','')),
+				('firmwareversion', decoder.decode_string(34).decode("utf-8")),
+				('platformtype', decoder.decode_string(34).decode("utf-8")),
+				('stationserialnumber', decoder.decode_string(22).decode("utf-8")),
 				('year', decoder.decode_16bit_int()),
 				('month', decoder.decode_16bit_int()),
 				('day', decoder.decode_16bit_int()),
