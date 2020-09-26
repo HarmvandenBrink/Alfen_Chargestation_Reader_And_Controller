@@ -30,8 +30,10 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __status__  = 'Beta'
+
+####### Imports #######
 
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
@@ -43,13 +45,45 @@ from influxdb import InfluxDBClient
 import time
 import math
 from datetime import datetime, timedelta
+import paho.mqtt.client as mqtt
 
 chargeStationIP = "192.168.0.0"
 minimumCurrent = 0
 maximumCurrent = 16
 
+# Influx configuration
+influxHost = "localhost"
+influxPort = 8086
+influxUsername = "username"
+influxPassword = "password"
+influxDatabase = "database"
+
+# MQTT configuration
+mqttHost = "localhost"
+mqttPort = 1883
+mqttUsername = "username"
+mqttPassword = "password"
+mqttSendTopic = "chargingStation"
+
+####### Connect #######
+
+try:
+	dbClient = InfluxDBClient(influxHost, influxPort, influxUsername, influxPassword, influxDatabase, timeout = 1)
+	dbClient.ping()
+	dbClientConnected = True
+except:
+	dbClientConnected = False
+	print("Not connected to InfluxDB")
+
+try:
+	mqttClient = mqtt.Client()
+	mqttClient.username_pw_set(mqttUsername, mqttPassword)
+	mqttClient.connect(mqttHost, mqttPort, 60)
+except:
+	print("Not connected to MQTT")
+
 chargeStationModbus = ModbusClient(chargeStationIP, port=502, unit_id=1 , auto_open=True, auto_close=True)
-print("Connected: {}".format(chargeStationModbus.connect()))
+print("Connected to chargingStation: {}".format(chargeStationModbus.connect()))
 		
 def limitChargeStationCurrent(num, minimum=minimumCurrent, maximum=maximumCurrent):
 	return max(min(num, maximum), minimum)
@@ -152,7 +186,7 @@ def fetchAllRegisters():
 
 		decodedStatusAndTransactionRegisters = OrderedDict([
 				('availability', decoder.decode_16bit_uint()),
-				('mode3state', decoder.decode_string(10).decode("utf-8")),
+				('mode3state', decoder.decode_string(10).decode("utf-8").replace('\x00','')),
 				('actualappliedmaxcurrent', decoder.decode_32bit_float()),
 				('modbusslavemaxcurrentvalidtime', decoder.decode_32bit_uint()),
 				('modbusslavemaxcurrent', decoder.decode_32bit_float()),
@@ -174,7 +208,6 @@ def fetchAllRegisters():
 		decoder = readChargeStationData(1100,6,200)
 
 		decodedStationStatusRegisters = OrderedDict([
-
 				('stationactivemaxcurrent', decoder.decode_32bit_float()),
 				('temperature', decoder.decode_32bit_float()),
 				('ocppstate', decoder.decode_16bit_uint()),
@@ -193,12 +226,12 @@ def fetchAllRegisters():
 		decoder = readChargeStationData(100,79,200)
 
 		decodedProductIdentificationRegisters = OrderedDict([
-				('name', decoder.decode_string(34).decode("utf-8")),
-				('manufacturer', decoder.decode_string(10).decode("utf-8")),
+				('name', decoder.decode_string(34).decode("utf-8").replace('\x00','')),
+				('manufacturer', decoder.decode_string(10).decode("utf-8").replace('\x00','')),
 				('modbustableversion', decoder.decode_16bit_int()),
-				('firmwareversion', decoder.decode_string(34).decode("utf-8")),
-				('platformtype', decoder.decode_string(34).decode("utf-8")),
-				('stationserialnumber', decoder.decode_string(22).decode("utf-8")),
+				('firmwareversion', decoder.decode_string(34).decode("utf-8").replace('\x00','')),
+				('platformtype', decoder.decode_string(34).decode("utf-8").replace('\x00','')),
+				('stationserialnumber', decoder.decode_string(22).decode("utf-8").replace('\x00','')),
 				('year', decoder.decode_16bit_int()),
 				('month', decoder.decode_16bit_int()),
 				('day', decoder.decode_16bit_int()),
@@ -221,6 +254,35 @@ def fetchAllRegisters():
 	except:
 		print("Error fetching modbus data")
 
+def writeMeasurementInflux(name, value):
+	try:
+		if str(value) == 'nan':
+			value = 'None'
+
+		if str(value) == 'not available':
+			return
+
+		json_body = [{
+			"measurement": name,
+			"tags": {
+				"name": name
+			},
+			"fields": {
+				"value": value,
+			}
+		}]
+		if dbClientConnected == True:
+			dbClient.write_points(json_body)
+	except:
+		pass
+
+def writeMeasurementMQTT(name, value):
+	try:
+		if mqttClient.is_connected():
+			mqttClient.publish(mqttSendTopic + "/" + name, str(value))
+	except:
+		pass
+
 z = fetchAllRegisters()
 
 print("-" * 60)
@@ -228,6 +290,8 @@ print("All registers")
 print("-" * 60)
 for name, value in iteritems(z):
 	print("%s" % name, value if isinstance(value, int) else value)
+	writeMeasurementInflux(name, value)
+	writeMeasurementMQTT(name, value)
 	
 #print(z['actualappliedmaxcurrent'])
 
