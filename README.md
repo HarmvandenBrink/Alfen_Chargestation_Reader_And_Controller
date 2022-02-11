@@ -1,5 +1,5 @@
 # Alfen Charge station Reader And Controller
-A charge station reader and controller for **Alfen NG9xx** chargers
+A charge station reader and controller for **Alfen NG9xx** chargers 
 
 This code was used in a home built Home Energy Management System (HEMS), to include an Alfen NG9xx charge station into a smart home. You can read more about it in my blog post: [How I built a HEMS with solar, a battery and a charge station (in Python)](https://medium.com/@harmvandenbrink/how-i-built-a-hems-with-solar-a-battery-and-a-charge-station-in-python-d5b51e60fd1c?source=friends_link&sk=f5e9302a02ea29065c3f677ecf1b8ed8)
 
