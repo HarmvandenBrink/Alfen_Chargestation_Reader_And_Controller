@@ -38,7 +38,7 @@ __status__  = 'Production'
 from alfenChargestation import alfenCharger
 
                #alfenCharger('ID, 'IP', minCurrent, maxCurrent)
-chargestation = alfenCharger('XYZ', '192.168.1.5', 0, 20)
+chargestation = alfenCharger('XYZ', '192.168.1.X', 0, 20)
 
 chargestation.readMeasurements()
 print(chargestation.platformtype)
