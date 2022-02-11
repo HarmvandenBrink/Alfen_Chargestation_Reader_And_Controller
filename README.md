@@ -4,27 +4,26 @@ A charge station reader and controller for Alfen NG9xx chargers
 This code was used in a home built Home Energy Management System (HEMS), to include an Alfen NG9xx charge station into a smart home. You can read more about it in my blog post: [How I built a HEMS with solar, a battery and a charge station (in Python)](https://medium.com/@harmvandenbrink/how-i-built-a-hems-with-solar-a-battery-and-a-charge-station-in-python-d5b51e60fd1c?source=friends_link&sk=f5e9302a02ea29065c3f677ecf1b8ed8)
 
 # How to use the code
-## Show all values of the charge station
+## Import the class and connect to an Alfen Chargestation
 
 ```python
-print("-" * 60)
-print("All registers")
-print("-" * 60)
-for name, value in iteritems(z):
-	print("%s" % name, value if isinstance(value, int) else value)
+from alfenChargestation import alfenCharger
+chargestation = alfenCharger('ICU-00001', '192.168.1.X', 0, 20)
+
 ```
 
 ## Show a single value
 
 ```python
-print(z['actualappliedmaxcurrent'])
+chargestation.readMeasurements()
+print(chargestation.voltage_l1n)
 ```
 
 ## Control the charge station
 
 ```python
-# Sets the current to 15 amps
-changeChargeStationCurrent(15)
+# Sets the current to 10 amps
+chargestation.changeCurrent(10)
 ```
 
 # Disclaimer
