@@ -34,15 +34,12 @@ __version__ = '1.42'
 __status__  = 'Production'
 __name__    = 'Alfen NG9x Control Class'
 
-from pymodbus.constants import Endian
-from pymodbus.payload import BinaryPayloadDecoder
-from pymodbus.payload import BinaryPayloadBuilder
-from pymodbus.client.sync import ModbusTcpClient as ModbusClient
-from pymodbus.compat import iteritems
 from collections import OrderedDict
+from pymodbus.constants import Endian
+from pymodbus.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus.payload import BinaryPayloadBuilder
+from pymodbus.payload import BinaryPayloadDecoder
 import time
-import math
-from datetime import datetime, timedelta
 
 class alfenCharger:
     def __init__(self, id, ip, minimumCurrent, maximumCurrent):
