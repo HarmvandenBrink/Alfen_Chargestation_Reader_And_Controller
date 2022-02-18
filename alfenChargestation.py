@@ -154,7 +154,9 @@ class alfenCharger:
         self.realenergyconsumed_l2 = decodedEnergyMeasurements['realenergyconsumed_l2']
         self.realenergyconsumed_l3 = decodedEnergyMeasurements['realenergyconsumed_l3']
         self.realenergyconsumed_sum = decodedEnergyMeasurements['realenergyconsumed_sum']
-
+        
+        time.sleep(0.1)
+        
         decoder = readChargeStationData(394,32,1)
         decodedEnergyMeasurementsRest = OrderedDict([
                 ('apparentenergy_l1', decoder.decode_64bit_float()),
@@ -175,7 +177,9 @@ class alfenCharger:
         self.reactiveenergy_l2 = decodedEnergyMeasurementsRest['reactiveenergy_l2']
         self.reactiveenergy_l3 = decodedEnergyMeasurementsRest['reactiveenergy_l3']
         self.reactiveenergy_sum = decodedEnergyMeasurementsRest['reactiveenergy_sum']
-
+        
+        time.sleep(0.1)
+        
         decoder = readChargeStationData(1200,16,1)
         decodedStatusAndTransactionRegisters = OrderedDict([
                 ('availability', decoder.decode_16bit_uint()),
@@ -197,6 +201,8 @@ class alfenCharger:
         self.modbusslavereceivedsetpointaccountedfor = decodedStatusAndTransactionRegisters['modbusslavereceivedsetpointaccountedfor']
         self.chargeusing1or3phases = decodedStatusAndTransactionRegisters['chargeusing1or3phases']
 
+        time.sleep(0.1)
+        
         decoder = readChargeStationData(1100,6,200)
         decodedStationStatusRegisters = OrderedDict([
                 ('stationactivemaxcurrent', decoder.decode_32bit_float()),
@@ -209,6 +215,8 @@ class alfenCharger:
         self.temperature = decodedStationStatusRegisters['temperature']
         self.ocppstate = decodedStationStatusRegisters['ocppstate']
         self.nrofsockets = decodedStationStatusRegisters['nrofsockets']
+            
+        time.sleep(0.1)
             
         decoder = readChargeStationData(100,79,200)
         decodedProductIdentificationRegisters = OrderedDict([
