@@ -35,10 +35,10 @@ __status__  = 'Production'
 
 ####### Imports #######
 
-from alfenChargestation import alfenCharger
+from alfenchargestation import AlfenCharger
 
-               #alfenCharger('ID, 'IP', minCurrent, maxCurrent)
-chargestation = alfenCharger('XYZ', '192.168.1.X', 0, 20)
+               #AlfenCharger('ID, 'IP', minCurrent, maxCurrent)
+chargestation = AlfenCharger('XYZ', '192.168.1.X', 0, 20)
 
 chargestation.readMeasurements()
 print(chargestation.platformtype)
