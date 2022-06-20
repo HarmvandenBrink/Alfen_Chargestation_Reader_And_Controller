@@ -41,7 +41,7 @@ from pymodbus.payload import BinaryPayloadBuilder
 from pymodbus.payload import BinaryPayloadDecoder
 import time
 
-class alfenCharger:
+class AlfenCharger:
     def __init__(self, id, ip, minimumCurrent, maximumCurrent):
         self.id = id
         self.ip = ip
