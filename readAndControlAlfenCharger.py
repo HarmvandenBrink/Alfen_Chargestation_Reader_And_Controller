@@ -90,7 +90,7 @@ print(chargestation.realenergyconsumed_sum)
 
 # chargestation.readMeasurementsSCN()
 
-# chargestation.changeCurrentSCN(80,80,80)
+# chargestation.changeCurrentSCN(42,42,42)
 
 print(f"chargestation.scnname: {chargestation.scnname}")
 print(f"chargestation.scnsockets: {chargestation.scnsockets}")
