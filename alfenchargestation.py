@@ -265,24 +265,24 @@ class AlfenCharger:
 
         decoder = readChargeStationDataSCN(1400,23,1)
         decodedEnergyMeasurementsSCN = OrderedDict([
-                ('scn_name', decoder.decode_string(8).decode("utf-8").replace('\x00','')),
+                ('scnname', decoder.decode_string(8).decode("utf-8").replace('\x00','')),
                 ('scnsockets', decoder.decode_16bit_uint()),
-                ('scn_total_consumption_phase_l1', decoder.decode_32bit_float()),
-                ('scn_total_consumption_phase_l2', decoder.decode_32bit_float()),
-                ('scn_total_consumption_phase_l3', decoder.decode_32bit_float()),
-                ('scn_actual_max_current_phase_l1', decoder.decode_32bit_float()),
-                ('scn_actual_max_current_phase_l2', decoder.decode_32bit_float()),
-                ('scn_actual_max_current_phase_l3', decoder.decode_32bit_float())
+                ('scntotalconsumptionphasel1', decoder.decode_32bit_float()),
+                ('scntotalconsumptionphasel2', decoder.decode_32bit_float()),
+                ('scntotalconsumptionphasel3', decoder.decode_32bit_float()),
+                ('scnactualmaxcurrentphasel1', decoder.decode_32bit_float()),
+                ('scnactualmaxcurrentphasel2', decoder.decode_32bit_float()),
+                ('scnactualmaxcurrentphasel3', decoder.decode_32bit_float())
         ])
 
-        self.scn_name = decodedEnergyMeasurementsSCN['scn_name']
+        self.scnname = decodedEnergyMeasurementsSCN['scnname']
         self.scnsockets = decodedEnergyMeasurementsSCN['scnsockets']
-        self.scn_total_consumption_phase_l1 = decodedEnergyMeasurementsSCN['scn_total_consumption_phase_l1']
-        self.scn_total_consumption_phase_l2 = decodedEnergyMeasurementsSCN['scn_total_consumption_phase_l2']
-        self.scn_total_consumption_phase_l3 = decodedEnergyMeasurementsSCN['scn_total_consumption_phase_l3']
-        self.scn_actual_max_current_phase_l1 = decodedEnergyMeasurementsSCN['scn_actual_max_current_phase_l1']
-        self.scn_actual_max_current_phase_l2 = decodedEnergyMeasurementsSCN['scn_actual_max_current_phase_l2']
-        self.scn_actual_max_current_phase_l3 = decodedEnergyMeasurementsSCN['scn_actual_max_current_phase_l3']
+        self.scntotalconsumptionphasel1 = decodedEnergyMeasurementsSCN['scntotalconsumptionphasel1']
+        self.scntotalconsumptionphasel2 = decodedEnergyMeasurementsSCN['scntotalconsumptionphasel2']
+        self.scntotalconsumptionphasel3 = decodedEnergyMeasurementsSCN['scntotalconsumptionphasel3']
+        self.scnactualmaxcurrentphasel1 = decodedEnergyMeasurementsSCN['scnactualmaxcurrentphasel1']
+        self.scnactualmaxcurrentphasel2 = decodedEnergyMeasurementsSCN['scnactualmaxcurrentphasel2']
+        self.scnactualmaxcurrentphasel3 = decodedEnergyMeasurementsSCN['scnactualmaxcurrentphasel3']
 
     def changeCurrentSCN(self, currentl1, currentl2, currentl3):
 
