@@ -42,7 +42,6 @@ import time
 chargestation = AlfenCharger('XYZ', '192.168.1.x', 0, 42)
 
 chargestation.readMeasurements()
-chargestation.readMeasurementsSCN()
 
 print(chargestation.platformtype)
 print(chargestation.meterstate)
@@ -85,11 +84,13 @@ print(chargestation.realenergyconsumed_l2)
 print(chargestation.realenergyconsumed_l3)
 print(chargestation.realenergyconsumed_sum)
 
-#chargestation.changeCurrent(16)
+# chargestation.changeCurrent(16)
 
 ### ONLY WHEN USING SCN (Smart Charging Network)
 
-#chargestation.changeCurrentSCN(42,42,42)
+# chargestation.readMeasurementsSCN()
+
+# chargestation.changeCurrentSCN(80,80,80)
 
 print(f"chargestation.scnname: {chargestation.scnname}")
 print(f"chargestation.scnsockets: {chargestation.scnsockets}")
