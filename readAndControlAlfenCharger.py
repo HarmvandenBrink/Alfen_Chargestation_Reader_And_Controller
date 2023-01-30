@@ -36,11 +36,14 @@ __status__  = 'Production'
 ####### Imports #######
 
 from alfenchargestation import AlfenCharger
+import time
 
                #AlfenCharger('ID, 'IP', minCurrent, maxCurrent)
-chargestation = AlfenCharger('XYZ', '192.168.1.X', 0, 20)
+chargestation = AlfenCharger('XYZ', '192.168.1.x', 0, 20)
 
 chargestation.readMeasurements()
+chargestation.readMeasurementsSCN()
+
 print(chargestation.platformtype)
 print(chargestation.meterstate)
 print(chargestation.meterlastvaluetimestamp)
@@ -82,4 +85,17 @@ print(chargestation.realenergyconsumed_l2)
 print(chargestation.realenergyconsumed_l3)
 print(chargestation.realenergyconsumed_sum)
 
-#chargestation.changeCurrent(10)
+#chargestation.changeCurrent(16)
+
+### ONLY WHEN USING SCN (Smart Charging Network)
+
+#chargestation.changeCurrentSCN(18,18,18)
+
+print(f"chargestation.scn_name: {chargestation.scn_name}")
+print(f"chargestation.scnsockets: {chargestation.scnsockets}")
+print(f"chargestation.scn_total_consumption_phase_l1: {chargestation.scn_total_consumption_phase_l1}")
+print(f"chargestation.scn_total_consumption_phase_l2: {chargestation.scn_total_consumption_phase_l2}")
+print(f"chargestation.scn_total_consumption_phase_l3: {chargestation.scn_total_consumption_phase_l3}")
+print(f"chargestation.scn_actual_max_current_phase_l1: {chargestation.scn_actual_max_current_phase_l1}")
+print(f"chargestation.scn_actual_max_current_phase_l2: {chargestation.scn_actual_max_current_phase_l2}")
+print(f"chargestation.scn_actual_max_current_phase_l3: {chargestation.scn_actual_max_current_phase_l3}")

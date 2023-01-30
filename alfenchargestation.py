@@ -61,7 +61,7 @@ class AlfenCharger:
         chargeStationModbus.write_registers(1210, registers, unit=1)
 
         chargeStationModbus.close()
-
+    
     def readMeasurements(self):
 
         def readChargeStationData(address,count, unit):
@@ -250,5 +250,49 @@ class AlfenCharger:
         self.second = decodedProductIdentificationRegisters['second']
         self.uptime = decodedProductIdentificationRegisters['uptime']
         self.timezone = decodedProductIdentificationRegisters['timezone']
+
+        chargeStationModbus.close()
+
+    def readMeasurementsSCN(self):
+
+        def readChargeStationDataSCN(address,count, unit):
+            result = chargeStationModbus.read_holding_registers(address, count, unit=200)
+            decoder = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=Endian.Big, wordorder=Endian.Big)
+            return decoder
+
+        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
+        time.sleep(0.1)
+
+        decoder = readChargeStationDataSCN(1400,23,1)
+        decodedEnergyMeasurementsSCN = OrderedDict([
+                ('scn_name', decoder.decode_string(8).decode("utf-8").replace('\x00','')),
+                ('scnsockets', decoder.decode_16bit_uint()),
+                ('scn_total_consumption_phase_l1', decoder.decode_32bit_float()),
+                ('scn_total_consumption_phase_l2', decoder.decode_32bit_float()),
+                ('scn_total_consumption_phase_l3', decoder.decode_32bit_float()),
+                ('scn_actual_max_current_phase_l1', decoder.decode_32bit_float()),
+                ('scn_actual_max_current_phase_l2', decoder.decode_32bit_float()),
+                ('scn_actual_max_current_phase_l3', decoder.decode_32bit_float())
+        ])
+
+        self.scn_name = decodedEnergyMeasurementsSCN['scn_name']
+        self.scnsockets = decodedEnergyMeasurementsSCN['scnsockets']
+        self.scn_total_consumption_phase_l1 = decodedEnergyMeasurementsSCN['scn_total_consumption_phase_l1']
+        self.scn_total_consumption_phase_l2 = decodedEnergyMeasurementsSCN['scn_total_consumption_phase_l2']
+        self.scn_total_consumption_phase_l3 = decodedEnergyMeasurementsSCN['scn_total_consumption_phase_l3']
+        self.scn_actual_max_current_phase_l1 = decodedEnergyMeasurementsSCN['scn_actual_max_current_phase_l1']
+        self.scn_actual_max_current_phase_l2 = decodedEnergyMeasurementsSCN['scn_actual_max_current_phase_l2']
+        self.scn_actual_max_current_phase_l3 = decodedEnergyMeasurementsSCN['scn_actual_max_current_phase_l3']
+
+    def changeCurrentSCN(self, currentl1, currentl2, currentl3):
+
+        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
+        time.sleep(0.1)
+        builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
+        builder.add_32bit_float(currentl1)
+        builder.add_32bit_float(currentl2)
+        builder.add_32bit_float(currentl3)
+        registers = builder.to_registers()
+        chargeStationModbus.write_registers(1417, registers, unit=200)
 
         chargeStationModbus.close()
