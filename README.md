@@ -19,11 +19,18 @@ chargestation.readMeasurements()
 print(chargestation.voltage_l1n)
 ```
 
-## Control the charge station
+## Control the charge station (single)
 
 ```python
 # Sets the current to 10 amps
 chargestation.changeCurrent(10)
+```
+
+## Control a set of chargers in a Smart Charging Network (SCN)
+
+```python
+# Set the current of the entire charging plaza to 42 amps
+chargestation.changeCurrentSCN(42,42,42)
 ```
 
 # Disclaimer
