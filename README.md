@@ -33,6 +33,19 @@ chargestation.changeCurrent(10)
 chargestation.changeCurrentSCN(42,42,42)
 ```
 
+## Change charge using 1 or 3 phases
+
+```python
+# Set the number of phases to charge on
+# !! Please verify that your car is capable of phase switching during charging !!
+changeChargeNumberOfPhases(3)
+```
+
+```python
+# Set the current of the entire charging plaza to 42 amps
+chargestation.changeCurrentSCN(42,42,42)
+```
+
 # Disclaimer
 
 The code within this repository comes with no guarantee, the use of this code is your responsibility.

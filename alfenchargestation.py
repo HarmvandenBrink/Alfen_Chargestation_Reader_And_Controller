@@ -296,3 +296,20 @@ class AlfenCharger:
         chargeStationModbus.write_registers(1417, registers, unit=200)
 
         chargeStationModbus.close()
+
+    def changeChargeNumberOfPhases(self, phases):
+        
+        if phases == 1 or phases == 3:
+
+            chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
+            time.sleep(0.1)
+            builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
+            builder.add_16bit_uint(phases)
+            registers = builder.to_registers()
+            chargeStationModbus.write_registers(1215, registers, unit=200)
+
+            chargeStationModbus.close()
+        
+        else:
+            
+            return "Error"
