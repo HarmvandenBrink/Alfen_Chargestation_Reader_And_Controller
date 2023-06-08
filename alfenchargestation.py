@@ -30,7 +30,7 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '1.42'
+__version__ = '2.42'
 __status__  = 'Production'
 __name__    = 'Alfen NG9x Control Class'
 
