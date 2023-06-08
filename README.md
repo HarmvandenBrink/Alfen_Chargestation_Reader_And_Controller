@@ -41,11 +41,6 @@ chargestation.changeCurrentSCN(42,42,42)
 changeChargeNumberOfPhases(3)
 ```
 
-```python
-# Set the current of the entire charging plaza to 42 amps
-chargestation.changeCurrentSCN(42,42,42)
-```
-
 # Disclaimer
 
 The code within this repository comes with no guarantee, the use of this code is your responsibility.
