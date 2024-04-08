@@ -30,7 +30,7 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '2.42'
+__version__ = '3.42'
 __status__  = 'Production'
 __name__    = 'Alfen NG9x Control Class'
 
@@ -275,6 +275,15 @@ class AlfenCharger:
                 ('scnactualmaxcurrentphasel3', decoder.decode_32bit_float())
         ])
 
+        decoder = readChargeStationDataSCN(1423,9,1)
+        decodedEnergyMeasurementsSCNSecond = OrderedDict([
+                ('remainingvalidtimemaxcurrentphase1', decoder.decode_32bit_float()),
+                ('remainingvalidtimemaxcurrentphase2', decoder.decode_32bit_float()),
+                ('remainingvalidtimemaxcurrentphase3', decoder.decode_32bit_float()),
+                ('scnsafemaxcurrent', decoder.decode_32bit_float()),
+                ('scnmodbusslavemaxcurrentenabled', decoder.decode_16bit_uint())
+        ])
+
         self.scnname = decodedEnergyMeasurementsSCN['scnname']
         self.scnsockets = decodedEnergyMeasurementsSCN['scnsockets']
         self.scntotalconsumptionphasel1 = decodedEnergyMeasurementsSCN['scntotalconsumptionphasel1']
@@ -283,17 +292,31 @@ class AlfenCharger:
         self.scnactualmaxcurrentphasel1 = decodedEnergyMeasurementsSCN['scnactualmaxcurrentphasel1']
         self.scnactualmaxcurrentphasel2 = decodedEnergyMeasurementsSCN['scnactualmaxcurrentphasel2']
         self.scnactualmaxcurrentphasel3 = decodedEnergyMeasurementsSCN['scnactualmaxcurrentphasel3']
+        self.remainingvalidtimemaxcurrentphase1 = decodedEnergyMeasurementsSCNSecond['remainingvalidtimemaxcurrentphase1']
+        self.remainingvalidtimemaxcurrentphase2 = decodedEnergyMeasurementsSCNSecond['remainingvalidtimemaxcurrentphase2']
+        self.remainingvalidtimemaxcurrentphase3 = decodedEnergyMeasurementsSCNSecond['remainingvalidtimemaxcurrentphase3']
+        self.scnsafemaxcurrent = decodedEnergyMeasurementsSCNSecond['scnsafemaxcurrent']
+        self.scnmodbusslavemaxcurrentenabled = decodedEnergyMeasurementsSCNSecond['scnmodbusslavemaxcurrentenabled']
 
     def changeCurrentSCN(self, currentl1, currentl2, currentl3):
 
         chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
         time.sleep(0.1)
+        
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(currentl1)
-        builder.add_32bit_float(currentl2)
-        builder.add_32bit_float(currentl3)
         registers = builder.to_registers()
         chargeStationModbus.write_registers(1417, registers, unit=200)
+
+        builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
+        builder.add_32bit_float(currentl2)
+        registers = builder.to_registers()
+        chargeStationModbus.write_registers(1419, registers, unit=200)
+
+        builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
+        builder.add_32bit_float(currentl3)
+        registers = builder.to_registers()
+        chargeStationModbus.write_registers(1421, registers, unit=200)
 
         chargeStationModbus.close()
 
@@ -301,12 +324,12 @@ class AlfenCharger:
         
         if phases == 1 or phases == 3:
 
-            chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
+            chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=1 , auto_open=True, auto_close=True)
             time.sleep(0.1)
             builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
             builder.add_16bit_uint(phases)
             registers = builder.to_registers()
-            chargeStationModbus.write_registers(1215, registers, unit=200)
+            chargeStationModbus.write_registers(1215, registers, unit=1)
 
             chargeStationModbus.close()
         

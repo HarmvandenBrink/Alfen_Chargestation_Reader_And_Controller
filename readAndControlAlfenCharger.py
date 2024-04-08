@@ -30,7 +30,7 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '2.42'
+__version__ = '3.42'
 __status__  = 'Production'
 
 ####### Imports #######
@@ -39,7 +39,7 @@ from alfenchargestation import AlfenCharger
 import time
 
                #AlfenCharger('ID, 'IP', minCurrent, maxCurrent)
-chargestation = AlfenCharger('XYZ', '192.168.1.x', 0, 42)
+chargestation = AlfenCharger('Alfen_001', '192.168.1.x', 0, 25)
 
 chargestation.readMeasurements()
 
@@ -84,19 +84,21 @@ print(chargestation.realenergyconsumed_l2)
 print(chargestation.realenergyconsumed_l3)
 print(chargestation.realenergyconsumed_sum)
 
-# chargestation.changeCurrent(16)
+chargestation.changeCurrent(16)
 
 ### ONLY WHEN USING SCN (Smart Charging Network)
 
 # chargestation.readMeasurementsSCN()
 
-# chargestation.changeCurrentSCN(42,42,42)
+# chargestation.changeCurrentSCN(16,16,16)
 
-print(f"chargestation.scnname: {chargestation.scnname}")
-print(f"chargestation.scnsockets: {chargestation.scnsockets}")
-print(f"chargestation.scntotalconsumptionphasel1: {chargestation.scntotalconsumptionphasel1}")
-print(f"chargestation.scntotalconsumptionphasel2: {chargestation.scntotalconsumptionphasel2}")
-print(f"chargestation.scntotalconsumptionphasel3: {chargestation.scntotalconsumptionphasel3}")
-print(f"chargestation.scnactualmaxcurrentphasel1: {chargestation.scnactualmaxcurrentphasel1}")
-print(f"chargestation.scnactualmaxcurrentphasel2: {chargestation.scnactualmaxcurrentphasel2}")
-print(f"chargestation.scnactualmaxcurrentphasel3: {chargestation.scnactualmaxcurrentphasel3}")
+# print(f"chargestation.scnname: {chargestation.scnname}")
+# print(f"chargestation.scnsockets: {chargestation.scnsockets}")
+# print(f"chargestation.scntotalconsumptionphasel1: {chargestation.scntotalconsumptionphasel1}")
+# print(f"chargestation.scntotalconsumptionphasel2: {chargestation.scntotalconsumptionphasel2}")
+# print(f"chargestation.scntotalconsumptionphasel3: {chargestation.scntotalconsumptionphasel3}")
+# print(f"chargestation.scnactualmaxcurrentphasel1: {chargestation.scnactualmaxcurrentphasel1}")
+# print(f"chargestation.scnactualmaxcurrentphasel2: {chargestation.scnactualmaxcurrentphasel2}")
+# print(f"chargestation.scnactualmaxcurrentphasel3: {chargestation.scnactualmaxcurrentphasel3}")
+# print(f"chargestation.scnsafemaxcurrent: {chargestation.scnsafemaxcurrent}")
+# print(f"chargestation.scnmodbusslavemaxcurrentenabled: {chargestation.scnmodbusslavemaxcurrentenabled}")
