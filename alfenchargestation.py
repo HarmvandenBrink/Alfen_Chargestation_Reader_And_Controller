@@ -307,16 +307,19 @@ class AlfenCharger:
         builder.add_32bit_float(currentl1)
         registers = builder.to_registers()
         chargeStationModbus.write_registers(1417, registers, unit=200)
+        time.sleep(0.1)
 
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(currentl2)
         registers = builder.to_registers()
         chargeStationModbus.write_registers(1419, registers, unit=200)
+        time.sleep(0.1)
 
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(currentl3)
         registers = builder.to_registers()
         chargeStationModbus.write_registers(1421, registers, unit=200)
+        time.sleep(0.1)
 
         chargeStationModbus.close()
 

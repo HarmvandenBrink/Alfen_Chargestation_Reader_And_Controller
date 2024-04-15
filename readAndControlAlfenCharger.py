@@ -39,7 +39,7 @@ from alfenchargestation import AlfenCharger
 import time
 
                #AlfenCharger('ID, 'IP', minCurrent, maxCurrent)
-chargestation = AlfenCharger('Alfen_001', '192.168.1.x', 0, 25)
+chargestation = AlfenCharger('Alfen_001', '192.168.1.5', 0, 25)
 
 chargestation.readMeasurements()
 
