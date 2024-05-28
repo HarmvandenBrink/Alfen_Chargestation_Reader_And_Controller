@@ -7,8 +7,8 @@ This code was used in a home built Home Energy Management System (HEMS), to incl
 ## Import the class and connect to an Alfen Chargestation
 
 ```python
-from alfenChargestation import alfenCharger
-chargestation = alfenCharger('ICU-00001', '192.168.1.X', 0, 20)
+from alfenchargestation import AlfenCharger
+chargestation = AlfenCharger('ICU-00001', '192.168.1.X', 0, 20)
 
 ```
 
