@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='alfencharger',
-    version='4.42',    
+    version='5.42',    
     description='Python package to read and control Alfen chargers',
     url='https://github.com/HarmvandenBrink/Alfen_Chargestation_Reader_And_Controller',
     author='Harm van den Brink',

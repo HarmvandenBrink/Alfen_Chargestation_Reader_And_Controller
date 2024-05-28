@@ -5,7 +5,7 @@ A-ChargeStationReaderAndController: A charge station reader for Alfen NG9xx char
 
 MIT License
 
-Copyright (c) 2022 Harm van den Brink
+Copyright (c) 2024 Harm van den Brink
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '4.42'
+__version__ = '5.42'
 __status__  = 'Production'
 __name__    = 'Alfen NG9x Control Class'
 
