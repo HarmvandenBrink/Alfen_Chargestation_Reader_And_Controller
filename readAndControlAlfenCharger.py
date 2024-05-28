@@ -30,7 +30,7 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '3.42'
+__version__ = '4.42'
 __status__  = 'Production'
 
 ####### Imports #######
@@ -41,6 +41,7 @@ import time
                #AlfenCharger('ID, 'IP', minCurrent, maxCurrent)
 chargestation = AlfenCharger('Alfen_001', '192.168.1.5', 0, 25)
 
+# Optional: set unit_id
 chargestation.readMeasurements()
 
 print(chargestation.platformtype)

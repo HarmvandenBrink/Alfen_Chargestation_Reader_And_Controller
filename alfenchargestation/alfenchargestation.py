@@ -30,7 +30,7 @@ __author__  = 'Harm van den Brink'
 __email__   = 'harmvandenbrink@gmail.com'
 __license__ = 'MIT License'
 
-__version__ = '3.42'
+__version__ = '4.42'
 __status__  = 'Production'
 __name__    = 'Alfen NG9x Control Class'
 
@@ -48,31 +48,31 @@ class AlfenCharger:
         self.minimumCurrent = minimumCurrent
         self.maximumCurrent = maximumCurrent
 
-    def changeCurrent(self, current):
+    def changeCurrent(self, current, unit_id=1):
         
         def limitChargeStationCurrent(num, minimum=self.minimumCurrent, maximum=self.maximumCurrent):
             return max(min(num, maximum), minimum)
 
-        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=1 , auto_open=True, auto_close=True)
+        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=unit_id , auto_open=True, auto_close=True)
         time.sleep(0.1)
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(limitChargeStationCurrent(current))        
         registers = builder.to_registers()
-        chargeStationModbus.write_registers(1210, registers, unit=1)
+        chargeStationModbus.write_registers(1210, registers, unit=unit_id)
 
         chargeStationModbus.close()
     
-    def readMeasurements(self):
+    def readMeasurements(self, unit_id=1):
 
         def readChargeStationData(address,count, unit):
             result = chargeStationModbus.read_holding_registers(address, count,  unit=unit)
             decoder = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             return decoder
 
-        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=1 , auto_open=True, auto_close=True)
+        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=unit_id , auto_open=True, auto_close=True)
         time.sleep(0.1)
 
-        decoder = readChargeStationData(300,94,1)
+        decoder = readChargeStationData(300,94,unit_id)
         decodedEnergyMeasurements = OrderedDict([
                 ('meterstate', decoder.decode_16bit_uint()),
                 ('meterlastvaluetimestamp', decoder.decode_64bit_uint()),
@@ -157,7 +157,7 @@ class AlfenCharger:
         
         time.sleep(0.1)
         
-        decoder = readChargeStationData(394,32,1)
+        decoder = readChargeStationData(394,32,unit_id)
         decodedEnergyMeasurementsRest = OrderedDict([
                 ('apparentenergy_l1', decoder.decode_64bit_float()),
                 ('apparentenergy_l2', decoder.decode_64bit_float()),
@@ -180,7 +180,7 @@ class AlfenCharger:
         
         time.sleep(0.1)
         
-        decoder = readChargeStationData(1200,16,1)
+        decoder = readChargeStationData(1200,16,unit_id)
         decodedStatusAndTransactionRegisters = OrderedDict([
                 ('availability', decoder.decode_16bit_uint()),
                 ('mode3state', decoder.decode_string(10).decode("utf-8").replace('\x00','')),
@@ -253,17 +253,17 @@ class AlfenCharger:
 
         chargeStationModbus.close()
 
-    def readMeasurementsSCN(self):
+    def readMeasurementsSCN(self, unit_id=200):
 
         def readChargeStationDataSCN(address,count, unit):
-            result = chargeStationModbus.read_holding_registers(address, count, unit=200)
+            result = chargeStationModbus.read_holding_registers(address, count, unit=unit)
             decoder = BinaryPayloadDecoder.fromRegisters(result.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             return decoder
 
-        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
+        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=unit_id, auto_open=True, auto_close=True)
         time.sleep(0.1)
 
-        decoder = readChargeStationDataSCN(1400,23,1)
+        decoder = readChargeStationDataSCN(1400,23,200)
         decodedEnergyMeasurementsSCN = OrderedDict([
                 ('scnname', decoder.decode_string(8).decode("utf-8").replace('\x00','')),
                 ('scnsockets', decoder.decode_16bit_uint()),
@@ -275,7 +275,7 @@ class AlfenCharger:
                 ('scnactualmaxcurrentphasel3', decoder.decode_32bit_float())
         ])
 
-        decoder = readChargeStationDataSCN(1423,9,1)
+        decoder = readChargeStationDataSCN(1423,9,200)
         decodedEnergyMeasurementsSCNSecond = OrderedDict([
                 ('remainingvalidtimemaxcurrentphase1', decoder.decode_32bit_float()),
                 ('remainingvalidtimemaxcurrentphase2', decoder.decode_32bit_float()),
@@ -298,41 +298,41 @@ class AlfenCharger:
         self.scnsafemaxcurrent = decodedEnergyMeasurementsSCNSecond['scnsafemaxcurrent']
         self.scnmodbusslavemaxcurrentenabled = decodedEnergyMeasurementsSCNSecond['scnmodbusslavemaxcurrentenabled']
 
-    def changeCurrentSCN(self, currentl1, currentl2, currentl3):
+    def changeCurrentSCN(self, currentl1, currentl2, currentl3, unit_id=200):
 
-        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=200 , auto_open=True, auto_close=True)
+        chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=unit_id , auto_open=True, auto_close=True)
         time.sleep(0.1)
         
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(currentl1)
         registers = builder.to_registers()
-        chargeStationModbus.write_registers(1417, registers, unit=200)
+        chargeStationModbus.write_registers(1417, registers, unit=unit_id)
         time.sleep(0.1)
 
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(currentl2)
         registers = builder.to_registers()
-        chargeStationModbus.write_registers(1419, registers, unit=200)
+        chargeStationModbus.write_registers(1419, registers, unit=unit_id)
         time.sleep(0.1)
 
         builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_32bit_float(currentl3)
         registers = builder.to_registers()
-        chargeStationModbus.write_registers(1421, registers, unit=200)
+        chargeStationModbus.write_registers(1421, registers, unit=unit_id)
         time.sleep(0.1)
 
         chargeStationModbus.close()
 
-    def changeChargeNumberOfPhases(self, phases):
+    def changeChargeNumberOfPhases(self, phases, unit_id=1):
         
         if phases == 1 or phases == 3:
 
-            chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=1 , auto_open=True, auto_close=True)
+            chargeStationModbus = ModbusClient(self.ip, port=502, unit_id=unit_id , auto_open=True, auto_close=True)
             time.sleep(0.1)
             builder = BinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
             builder.add_16bit_uint(phases)
             registers = builder.to_registers()
-            chargeStationModbus.write_registers(1215, registers, unit=1)
+            chargeStationModbus.write_registers(1215, registers, unit=unit_id)
 
             chargeStationModbus.close()
         
